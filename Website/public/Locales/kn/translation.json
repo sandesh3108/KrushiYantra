@@ -1,0 +1,38 @@
+{
+  "select_language": "ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",
+  "krushi_yantra": "ಕೃಷಿ ಯಂತ್ರ",
+  "services": "ಸೇವೆಗಳು",
+  "about_us": "ನಮ್ಮ ಬಗ್ಗೆ",
+  "contact_us": "ಸಂಪರ್ಕ",
+  "sign_up": "ನೋಂದಣಿ",
+  "sign_in": "ಲಾಗಿನ್",
+  "landing_page_title": "ಲ್ಯಾಂಡಿಂಗ್ ಪೇಜ್",
+  "join_farmers": "1000+ ರೈತರಿಗೆ ಸೇರಿಕೊಳ್ಳಿ",
+  "get_into_ai": "ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆಯ ಲೋಕಕ್ಕೆ ಪ್ರವೇಶಿಸಿ",
+  "world": "ಲೋಕ",
+  "rotating_text": [
+    "ಕೃಷಿ ಯಂತ್ರ",
+    "ಹವಾಮಾನ ಬಾಟ್",
+    "ರೋಗ ಬಾಟ್",
+    "ವಾಯ್ಸ್ ಸಹಾಯಕ",
+    "ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು",
+    "ಕೃಷಿ"
+  ],
+  "info_text": "ಇದು ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ ಆಧಾರಿತ ಕೃಷಿ ಸೇವೆ.",
+  "take_a_look": "ನಮ್ಮ ಸೇವೆಗಳ ಬಗ್ಗೆ ಒಂದು ನೋಟ ಹಾಕಿ",
+  "cutting_edge": "ಅತ್ಯಾಧುನಿಕ",
+  "services_for_you": "ನಿಮಗಾಗಿ ಸೇವೆಗಳು!",
+  
+  "agriculture_technology": "ಕೃಷಿ ತಂತ್ರಜ್ಞಾನ",
+  "revolutionizing": "ಕ್ರಾಂತಿ",
+  "agriculture_through": "ಕೃಷಿಯ ಮೂಲಕ",
+  "get_started": "ಪ್ರಾರಂಭಿಸಿ",
+  "good_morning": "ಶುಭೋದಯ",
+  "good_afternoon": "ಶುಭ ಮಧ್ಯಾಹ್ನ",
+  "good_evening": "ಶುಭ ಸಂಜೆ",
+  "go_to": "ಗೆ ಹೋಗಿ",
+  "climate_bot": "ಹವಾಮಾನ ಬಾಟ್",
+  "disease_bot": "ರೋಗ ಬಾಟ್",
+  "recommendation_bot": "ಶಿಫಾರಸು ಬಾಟ್",
+  "voice_assist": "ವಾಯ್ಸ್ ಸಹಾಯಕ"
+}
