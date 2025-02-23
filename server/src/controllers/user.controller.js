@@ -81,7 +81,7 @@ const loginUser = asyncHandler(async(req, res)=>{
   const userRole = await pool.query(userRoleQuery, userRoleValues);
 
   const token = jwt.sign(
-    {email: user.rows[0].email, role: userRole.rows[0].role},
+    {email: user.rows[0].email, role: userRole.rows[0].name},
     process.env.JWT_SEC,
     { expiresIn: "7d" }
   );
@@ -93,7 +93,7 @@ const loginUser = asyncHandler(async(req, res)=>{
     maxAge: 1000 * 60 * 60 * 24 * 7,
   })
 
-  res.send(new ApiResponse(200, {email: user.rows[0].email, role: userRole.rows[0].role, token}, "User logged in successfully"));
+  res.send(new ApiResponse(200, {email: user.rows[0].email, role: userRole.rows[0].name, token}, "User logged in successfully"));
 });
 
 const logOutUser = asyncHandler(async (req, res) => {

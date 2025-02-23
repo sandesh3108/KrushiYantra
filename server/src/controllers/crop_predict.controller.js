@@ -11,7 +11,7 @@ const predictCrop = asyncHandler(async (req, res) => {
   }
 
   try {
-    const url = "http://127.0.0.1:6969/predict";
+    const url = "http://127.0.0.1:5050/predict";
     const data = {
       N: n,
       P: p,

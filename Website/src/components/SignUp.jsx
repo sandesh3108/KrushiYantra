@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Stepper, Step, Select } from "./component";
 import Input from "./UI/Input";
+import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const SignUp = () => {
   const {
@@ -13,36 +17,34 @@ const SignUp = () => {
     mode: "onChange",
   });
 
-  const [otp, setOtp] = useState("");
-  const [isOtpSent, setIsOtpSent] = useState(false);
   const [stepError, setStepError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    const role = localStorage.getItem("role");
+
+    if (token && role) {
+      setIsLoggedIn(true);
+      navigate(`/main-page/${role}`);
+    }
+  }, [navigate]);
+
 
   const validateStep = async (step) => {
     if (step === 1) return true;
-
-    let fieldsToValidate = [];
-    switch (step) {
-      case 2:
-        fieldsToValidate = ["name", "role"];
-        break;
-      case 3:
-        fieldsToValidate = ["phone", "email", "password"];
-        break;
-      case 4:
-        // Temporarily allow proceeding without OTP validation
-        return true;
-      default:
-        return true;
-    }
-
+    let fieldsToValidate =
+      step === 2 ? ["name", "role"] : ["phone", "email", "password"];
     const isValid = await trigger(fieldsToValidate);
+
     if (!isValid) {
-      // Set appropriate error message based on step
-      if (step === 2) {
-        setStepError("Please fill in your name and select your role");
-      } else if (step === 3) {
-        setStepError("Please fill in all contact information fields correctly");
-      }
+      setStepError(
+        step === 2
+          ? "Please fill in your name and select your role"
+          : "Please fill in all contact information correctly"
+      );
     } else {
       setStepError("");
     }
@@ -51,25 +53,44 @@ const SignUp = () => {
 
   const handleStepChange = async (newStep) => {
     setStepError(""); // Clear previous error
-    const isValid = await validateStep(newStep - 1);
-    if (isValid) {
-      if (newStep === 4) {
-        // Simulate OTP send
-        setIsOtpSent(true);
-      }
-      return true;
+    return await validateStep(newStep - 1);
+  };
+
+  const handleSignUp = async (formData) => {
+    setLoading(true);
+    try {
+      const response = await axios.post("http://localhost:3000/api/v1/auth/register", formData);
+      console.log("User registered successfully:", response.data);
+  
+      // Save user details in localStorage
+      localStorage.setItem("authToken", response.data.data.token);
+      localStorage.setItem("role", formData.role);
+  
+      setIsLoggedIn(true);
+  
+      // Redirect to main page based on role
+      navigate(`/main-page/${formData.role}`);
+    } catch (error) {
+      console.error("Error:", error.response?.data?.message || error.message);
+      alert(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
-    return false;
   };
+  
+  
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", { ...data, otp });
-    // Handle form submission
-  };
+  const onSubmit = async (data) => {
+    console.log("Form submitted:", data);
+    const formData = {
+      username: data.name,
+      email: data.email,
+      password: data.password,
+      phone: data.phone,
+      role: data.role,
+    };
 
-  const handleOtpChange = (e) => {
-    const value = e.target.value.replace(/\D/g, "").slice(0, 6);
-    setOtp(value);
+    await handleSignUp(formData);
   };
 
   return (
@@ -78,7 +99,7 @@ const SignUp = () => {
         <Stepper
           initialStep={1}
           onStepChange={handleStepChange}
-          onFinalStepCompleted={handleSubmit(onSubmit)}
+          onFinalStepCompleted={handleSubmit(onSubmit)} // ✅ Auto-submits when last step is reached
           backButtonText="Previous"
           nextButtonText="Next"
           disableStepIndicators={true}
@@ -148,12 +169,7 @@ const SignUp = () => {
                 label="Your Email"
                 type="email"
                 placeholder="Enter your email"
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    message: "Please enter a valid email address",
-                  },
-                })}
+                {...register("email", { required: "Email is required" })}
                 error={errors.email?.message}
               />
               <Input
@@ -166,42 +182,9 @@ const SignUp = () => {
                     value: 6,
                     message: "Password must be at least 6 characters",
                   },
-                  pattern: {
-                    message:
-                      "Password must contain at least one letter and one number",
-                  },
                 })}
                 error={errors.password?.message}
               />
-            </div>
-          </Step>
-
-          <Step>
-            <div className="flex flex-col items-center gap-4">
-              <h2 className="text-xl font-semibold mb-4">
-                Verify Your Account
-              </h2>
-              <p className="text-gray-600 mb-4">
-                {isOtpSent
-                  ? "We've sent a verification code to your email and phone number."
-                  : "Click Complete to finish registration"}
-              </p>
-              <div className="w-full max-w-xs">
-                <Input
-                  label="Enter OTP (Optional for now)"
-                  type="text"
-                  placeholder="Enter 6-digit OTP"
-                  value={otp}
-                  onChange={handleOtpChange}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsOtpSent(true)}
-                className="text-blue-600 hover:text-blue-800 text-sm"
-              >
-                Resend OTP
-              </button>
             </div>
           </Step>
         </Stepper>

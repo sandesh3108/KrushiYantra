@@ -33,7 +33,7 @@ const AppRoutes = () => {
         {/* Main Application Routes */}
         <Route path="main-page" element={<MainPage />}>
           {/* Farmer Routes */}
-          <Route path="farmer">
+          <Route path="Farmer">
             <Route index element={<Farmer />} />
               <Route path="crop-bot" element={<CropPrediction />} />
               <Route path="climate-bot" element={<Climate />} />
@@ -43,7 +43,7 @@ const AppRoutes = () => {
           </Route>
 
           {/* Buyer Routes */}
-          <Route path="buyer" element={<Buyer />} />
+          <Route path="Buyer" element={<Buyer />} />
           <Route path="community" element={<CommunityPage />} />
         </Route>
 
