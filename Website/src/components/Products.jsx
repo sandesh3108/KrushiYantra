@@ -1,36 +1,20 @@
 import React, { useState } from "react";
 import Product from "./Product";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const Products = () => {
+  const { t } = useTranslation();
   const products = [
     {
-      title: "Crop Prediction",
+      title: t("crop_prediction"),
       description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus repudiandae quam aliquid accusamus ipsam a. Odio, reiciendis alias!",
-      live: true,
-      case: false,
+        t("crop_prediction_description"),
     },
     {
-      title: "Climate Bot",
+      title: t("climate_bot"),
       description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus repudiandae quam aliquid accusamus ipsam a. Odio, reiciendis alias!",
-      live: true,
-      case: false,
-    },
-    {
-      title: "Disease Bot",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus repudiandae quam aliquid accusamus ipsam a. Odio, reiciendis alias!",
-      live: true,
-      case: false,
-    },
-    {
-      title: "Voice Assistance",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus repudiandae quam aliquid accusamus ipsam a. Odio, reiciendis alias!",
-      live: true,
-      case: true,
+        t("climate_bot_description"),
     },
   ];
 

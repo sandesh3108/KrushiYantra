@@ -32,8 +32,9 @@
   "good_evening": "Good Evening",
   "go_to": "Go to",
   "crop_prediction": "Crop Prediction",
-  
+  "crop_prediction_description": "This bot will help farmers to predict the best time to plant their crops based on the weather and soil conditions.",
   "climate_bot": "Climate Bot",
+  "climate_bot_description": "This bot will help farmers to monitor the weather conditions and make informed decisions about their crops.",
   "disease_bot": "Disease Bot",
   "recommendation_bot": "Recommendation Bot",
   "voice_assist": "Voice Assist"

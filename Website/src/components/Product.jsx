@@ -3,7 +3,7 @@ import AnimatedButton from './Animated/AnimatedButton'
 
 const Product = ({ val , mover, count }) => {
   return (
-    <div className='w-full h-[17rem] py-10 px-5 text-white font-["Navbar"]'>
+    <div className='hover:bg-green-300 duration-1000 w-full h-[17rem] py-10 px-5 text-white font-["Navbar"]'>
       <div 
       onMouseEnter={() => {
         mover(count)
