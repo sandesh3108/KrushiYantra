@@ -12,23 +12,28 @@ const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Define base menu items using useMemo to prevent unnecessary recalculations
+  // Function to handle smooth scrolling for "Services"
+  const handleScrollToSection = (e, id) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      setIsMenuOpen(false); // Close mobile menu after clicking
+    }
+  };
+
+  // Define base menu items (removed "Contact Us")
   const baseMenuItems = useMemo(
     () => [
       {
-        link: "/services",
         text: "services",
+        action: (e) => handleScrollToSection(e, "services-section"), // Scroll function
         image: "/images/services.png",
       },
       {
         link: "/about",
         text: "about_us",
         image: "/images/about.png",
-      },
-      {
-        link: "/contact",
-        text: "contact_us",
-        image: "/images/contact.png",
       },
     ],
     []
@@ -60,16 +65,6 @@ const Navbar = () => {
     return items;
   }, [location.pathname, baseMenuItems, authMenuItems]);
 
-  // Get translated menu items for FlowingMenu
-  const translatedMenuItems = useMemo(
-    () =>
-      menuItems.map((item) => ({
-        ...item,
-        text: t(item.text),
-      })),
-    [menuItems, t]
-  );
-
   return (
     <nav className="fixed top-5 left-0 right-0 z-50 bg-background/80 text-black font-['Navbar']">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-14 lg:py-2">
@@ -77,24 +72,32 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center gap-2">
-              <span className="text-xl font-semibold">
-                {t("krushi_yantra")}
-              </span>
+              <span className="text-xl font-semibold">{t("krushi_yantra")}</span>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
           {location.pathname === "/" ? (
             <div className="xl:-ml-96 hidden md:flex md:items-center md:space-x-8">
-              {baseMenuItems.map((item) => (
-                <Link
-                  key={item.link}
-                  to={item.link}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
-                >
-                  {t(item.text)}
-                </Link>
-              ))}
+              {baseMenuItems.map((item) =>
+                item.action ? (
+                  <button
+                    key={item.text}
+                    onClick={item.action}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 cursor-pointer bg-transparent border-none"
+                  >
+                    {t(item.text)}
+                  </button>
+                ) : (
+                  <Link
+                    key={item.link}
+                    to={item.link}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  >
+                    {t(item.text)}
+                  </Link>
+                )
+              )}
             </div>
           ) : null}
 
@@ -116,24 +119,17 @@ const Navbar = () => {
 
             {/* Language Switcher */}
             <LanguageSwitcher />
-            {}
           </div>
 
           {/* Mobile menu button */}
-          {location.pathname === "/" && (
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex md:hidden items-center justify-center p-2 rounded-md text-foreground hover:bg-black/5 transition-colors duration-200"
-              aria-expanded={isMenuOpen}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
-              )}
-            </button>
-          )}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex md:hidden items-center justify-center p-2 rounded-md text-foreground hover:bg-black/5 transition-colors duration-200"
+            aria-expanded={isMenuOpen}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
+          </button>
         </div>
       </div>
 
@@ -141,8 +137,36 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden w-full p-1">
           <div className="bg-background/95 bg-green-800 h-fit flex flex-col items-center p-2 rounded-2xl">
-            <div className="w-full">
-              <FlowingMenu items={translatedMenuItems} />
+            <div className="w-full flex flex-col gap-2">
+              {baseMenuItems.map((item) =>
+                item.action ? (
+                  <button
+                    key={item.text}
+                    onClick={item.action}
+                    className="block w-full text-center py-2 text-white hover:bg-green-700 rounded-lg transition duration-200"
+                  >
+                    {t(item.text)}
+                  </button>
+                ) : (
+                  <Link
+                    key={item.link}
+                    to={item.link}
+                    className="block w-full text-center py-2 text-white hover:bg-green-700 rounded-lg transition duration-200"
+                  >
+                    {t(item.text)}
+                  </Link>
+                )
+              )}
+              {/* Auth Buttons in Mobile Menu */}
+              {authMenuItems.map((item) => (
+                <Link
+                  key={item.link}
+                  to={item.link}
+                  className="block w-full text-center py-2 text-white hover:bg-green-700 rounded-lg transition duration-200"
+                >
+                  {t(item.text)}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

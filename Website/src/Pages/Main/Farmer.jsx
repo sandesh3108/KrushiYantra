@@ -20,7 +20,7 @@ const Farmer = () => {
 
   const botOptions = [
     {
-      name: "Crop Prediction",
+      name: t("crop_prediction"),
       image:
         "https://images.unsplash.com/photo-1594771804886-a933bb2d609b?q=80&w=2082&auto=format&fit=crop",
       route: "crop-bot",
@@ -31,24 +31,24 @@ const Farmer = () => {
         "https://images.unsplash.com/photo-1594771804886-a933bb2d609b?q=80&w=2082&auto=format&fit=crop",
       route: "climate-bot",
     },
-    {
-      name: t("disease_bot"),
-      image:
-        "https://images.unsplash.com/photo-1597916829826-02e5bb4a54e0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      route: "disease-bot",
-    },
-    {
-      name: t("recommendation_bot"),
-      image:
-        "https://images.unsplash.com/photo-1656407410275-e63e689bcd90?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      route: "recommendation-bot",
-    },
-    {
-      name: t("voice_assist"),
-      image:
-        "https://images.unsplash.com/photo-1518931169559-527a99b4074d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      route: "voice-assist",
-    },
+    // {
+    //   name: t("disease_bot"),
+    //   image:
+    //     "https://images.unsplash.com/photo-1597916829826-02e5bb4a54e0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //   route: "disease-bot",
+    // },
+    // {
+    //   name: t("recommendation_bot"),
+    //   image:
+    //     "https://images.unsplash.com/photo-1656407410275-e63e689bcd90?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //   route: "recommendation-bot",
+    // },
+    // {
+    //   name: t("voice_assist"),
+    //   image:
+    //     "https://images.unsplash.com/photo-1518931169559-527a99b4074d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //   route: "voice-assist",
+    // },
   ];
 
   const getGreeting = () => {

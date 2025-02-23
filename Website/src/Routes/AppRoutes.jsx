@@ -10,6 +10,7 @@ import Climate from "../components/bots/Climate";
 import Disease from "../components/bots/Disease";
 import CommunityPage from "../Pages/community/CommunityPage";
 import CropPrediction from "../components/bots/CropPrediction";
+import About from "../Pages/About/About";
 
 // // Bot Components
 // import ClimateBot from "../Pages/Bots/ClimateBot";
@@ -23,6 +24,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Layout />}>
         {/* Public Routes */}
         <Route index element={<LandigPage />} />
+        <Route path="about" element={<About />} />
         
         {/* Auth Routes */}
         <Route path="auth" element={<AuthPage />}>

@@ -102,7 +102,7 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-full px-5 md:px-20 py-10 md:py-20">
+      <div id="services-section" className=" w-full px-5 md:px-20 py-10 md:py-20">
         <div className="header bg-pink-300 text-4xl md:text-7xl font-['Navbar'] text-center md:text-left">
           <h1>
             <span>{t("take_a_look")}</span> {t("cutting_edge", { returnObjects: true })}

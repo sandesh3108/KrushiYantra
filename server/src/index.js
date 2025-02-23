@@ -8,9 +8,6 @@ function StartServer(){
 
   ConnectDB()
   .then(()=>{
-    app.on("error", (err)=>{
-      throw err;
-    })
 
     app.listen(port, '0.0.0.0',()=>{
       console.log(`Connected to server ${port}`)

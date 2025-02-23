@@ -144,9 +144,15 @@ const Climate = () => {
         },
         { headers: { "Content-Type": "application/json" } }
       );
-
+  
       const apiData = response.data.data;
+  
       if (response.data.status) {
+        // Exclude only the summary report if it exceeds the query limit
+        if (apiData.summary_report?.includes("QUERY LENGTH LIMIT EXCEEDED")) {
+          delete apiData.summary_report; // Remove only the problematic summary
+        }
+  
         setRawApiData(apiData);
         // Persist the raw API data and city in localStorage
         localStorage.setItem("climateData", JSON.stringify({ rawApiData: apiData, city }));
@@ -158,6 +164,7 @@ const Climate = () => {
       setError("Failed to fetch weather data. Please try again later.");
     }
   };
+  
 
   // Clear persisted data and reset the form view
   const handleGoBack = () => {
@@ -208,12 +215,12 @@ const Climate = () => {
             </div>
 
             {/* Summary Report */}
-            {summaryReport && (
+            {/* {summaryReport && (
               <div className="mt-4 p-4 bg-green-100 text-green-800 border border-green-400 rounded-lg shadow-md text-left whitespace-pre-wrap">
                 <h2 className="text-xl font-bold">Summary Report</h2>
                 <p className="text-gray-700">{summaryReport}</p>
               </div>
-            )}
+            )} */}
 
             {/* Weather Cards */}
             {weatherData.length > 0 && (
