@@ -6,7 +6,11 @@ import axios from "axios";
 import ImageCapture from "../ImageCapture";
 
 const Disease = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm({ mode: "onChange" });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const [city, setCity] = useState("Fetching location...");
@@ -14,67 +18,85 @@ const Disease = () => {
   const [irrigationAdvice, setIrrigationAdvice] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          try {
-            const response = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-            );
-            const data = await response.json();
-            setCity(
-              data.address.city ||
-              data.address.town ||
-              data.address.village ||
-              "Unknown Location"
-            );
-          } catch (err) {
-            setError("Failed to fetch location data.");
-          }
-        },
-        () => {
-          setError("Location access denied. Please enable location services.");
-        }
-      );
-    } else {
-      setError("Geolocation is not supported by this browser.");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       async (position) => {
+  //         const { latitude, longitude } = position.coords;
+  //         try {
+  //           const response = await fetch(
+  //             `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+  //           );
+  //           const data = await response.json();
+  //           setCity(
+  //             data.address.city ||
+  //               data.address.town ||
+  //               data.address.village ||
+  //               "Unknown Location"
+  //           );
+  //         } catch (err) {
+  //           setError("Failed to fetch location data.");
+  //         }
+  //       },
+  //       () => {
+  //         setError("Location access denied. Please enable location services.");
+  //       }
+  //     );
+  //   } else {
+  //     setError("Geolocation is not supported by this browser.");
+  //   }
+  // }, []);
 
   const onSubmit = async (data) => {
-    const payload = { ...data, capturedImage, city };
+    if (!capturedImage) {
+      setError("Please capture an image before submitting.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("crop_type", data.crop);
+    formData.append("question", "What disease is affecting my crop?");
+    formData.append("image", capturedImage);
+
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/v1/weather/irrigation`,
-        payload,
-        { headers: { "Content-Type": "application/json" } }
+        "http://localhost:3000/api/v1/submit",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
-      if (response.data.status) {
-        setIrrigationAdvice(response.data.data.irrigation_advice);
-        setWeatherData(response.data.data.weather_data);
+
+      if (response.data) {
+        console.log("Disease Prediction Response:", response.data);
+        setIrrigationAdvice(response.data.message); // Update the UI with the response
       }
     } catch (err) {
-      console.error("Error fetching data", err);
-      setError("Failed to fetch weather data. Please try again later.");
+      console.error("Error submitting disease prediction request", err);
+      setError("Failed to process request. Please try again.");
     }
-    setFormSubmitted(true);
   };
 
   return (
     <div className="font-['Navbar']">
       <form onSubmit={handleSubmit(onSubmit)}>
         {!formSubmitted ? (
-          <Stepper initialStep={1} onFinalStepCompleted={handleSubmit(onSubmit)}>
+          <Stepper
+            initialStep={1}
+            onFinalStepCompleted={handleSubmit(onSubmit)}
+          >
             {/* Step 1: Image Capture */}
             <Step>
               <div className="flex flex-col gap-4">
-                <h2 className="text-xl font-semibold mb-4">Crop Image Capture</h2>
+                <h2 className="text-xl font-semibold mb-4">
+                  Crop Image Capture
+                </h2>
                 <ImageCapture onCapture={setCapturedImage} />
                 {capturedImage && (
                   <div className="mt-4">
-                    <p className="text-green-600">Image captured successfully!</p>
+                    <p className="text-green-600">
+                      Image captured successfully!
+                    </p>
                     <img
                       src={capturedImage}
                       alt="Captured Crop"
@@ -84,7 +106,7 @@ const Disease = () => {
                 )}
               </div>
             </Step>
-            
+
             {/* Step 2: Crop Details */}
             <Step>
               <div className="flex flex-col gap-4">
@@ -106,7 +128,9 @@ const Disease = () => {
                 <Input
                   label="Date of Irrigation"
                   type="date"
-                  {...register("irrigation_date", { required: "Date is required" })}
+                  {...register("irrigation_date", {
+                    required: "Date is required",
+                  })}
                   error={errors.irrigation_date?.message}
                 />
               </div>
@@ -114,9 +138,8 @@ const Disease = () => {
           </Stepper>
         ) : (
           <div>
-            <h2>Disease Remedies and Weather Data</h2>
+            <h2>Disease Prediction Response</h2>
             <p>{irrigationAdvice}</p>
-            {/* Render weatherData details as needed */}
           </div>
         )}
       </form>

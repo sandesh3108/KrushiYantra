@@ -9,7 +9,7 @@ import Buyer from "../Pages/Main/Buyer";
 import Climate from "../components/bots/Climate";
 import Disease from "../components/bots/Disease";
 import CommunityPage from "../Pages/community/CommunityPage";
-import ClimatePrediction from "../components/bots/ClimatePrediction";
+import CropPrediction from "../components/bots/CropPrediction";
 
 // // Bot Components
 // import ClimateBot from "../Pages/Bots/ClimateBot";
@@ -35,7 +35,7 @@ const AppRoutes = () => {
           {/* Farmer Routes */}
           <Route path="farmer">
             <Route index element={<Farmer />} />
-              <Route path="crop-bot" element={<ClimatePrediction />} />
+              <Route path="crop-bot" element={<CropPrediction />} />
               <Route path="climate-bot" element={<Climate />} />
               <Route path="disease-bot" element={<Disease />} />
               <Route path="recommendation-bot" element={<h1>Recommendation Bot</h1>} />
