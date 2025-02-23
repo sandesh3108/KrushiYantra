@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Stepper, Step } from "../component";
 import Input from "../UI/Input";
 import axios from "axios";
+import MapComponent from "../MapComponent";
 
 const CropPrediction = () => {
   const {
@@ -16,6 +17,8 @@ const CropPrediction = () => {
   const [error, setError] = useState("");
   const [city, setCity] = useState("Fetching location...");
   const [loadingCity, setLoadingCity] = useState(true);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
 
   // Geolocation: get user's location and set the city
   useEffect(() => {
@@ -23,6 +26,8 @@ const CropPrediction = () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
+          setLatitude(latitude);
+          setLongitude(longitude);
           try {
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
@@ -88,8 +93,14 @@ const CropPrediction = () => {
         setError("No prediction data available.");
       }
     } catch (error) {
-      console.error("❌ Error fetching crop prediction:", error.response?.data || error);
-      setError(error.response?.data?.message || "Failed to fetch crop prediction. Please try again.");
+      console.error(
+        "❌ Error fetching crop prediction:",
+        error.response?.data || error
+      );
+      setError(
+        error.response?.data?.message ||
+          "Failed to fetch crop prediction. Please try again."
+      );
     }
   };
 
@@ -97,7 +108,10 @@ const CropPrediction = () => {
     <div className="font-['Navbar']">
       <form onSubmit={handleSubmit(onSubmit)}>
         {!formSubmitted ? (
-          <Stepper initialStep={1} onFinalStepCompleted={handleSubmit(onSubmit)}>
+          <Stepper
+            initialStep={1}
+            onFinalStepCompleted={handleSubmit(onSubmit)}
+          >
             {/* Step 1: Soil Nutrient Information */}
             <Step>
               <div className="flex flex-col gap-4">
@@ -158,9 +172,17 @@ const CropPrediction = () => {
           </Stepper>
         ) : (
           <div className="text-center p-6">
-            <h1 className="text-2xl font-bold">
+            {/* <h1 className="text-2xl font-bold">
               {loadingCity ? "Fetching location..." : city}
-            </h1>
+            </h1> */}
+            <div>
+              {latitude !== 0 && longitude !== 0 ? (
+              <MapComponent latitude={latitude} longitude={longitude} />) : (
+              <div className="w-full h-64 bg-gray-200 animate-pulse">
+                Fetching location...
+              </div>
+              )}
+            </div>
 
             {/* Crop Prediction Result */}
             {cropPrediction ? (
@@ -170,9 +192,15 @@ const CropPrediction = () => {
 
                 {/* Display Additional Data */}
                 <div className="mt-4 text-gray-700">
-                  <p><strong>Temperature:</strong> {cropPrediction.temperature}°C</p>
-                  <p><strong>Humidity:</strong> {cropPrediction.humidity}%</p>
-                  <p><strong>Rainfall:</strong> {cropPrediction.rainfall} mm</p>
+                  <p>
+                    <strong>Temperature:</strong> {cropPrediction.temperature}°C
+                  </p>
+                  <p>
+                    <strong>Humidity:</strong> {cropPrediction.humidity}%
+                  </p>
+                  <p>
+                    <strong>Rainfall:</strong> {cropPrediction.rainfall} mm
+                  </p>
                 </div>
               </div>
             ) : (
